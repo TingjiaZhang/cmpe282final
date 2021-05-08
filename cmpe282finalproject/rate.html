@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+	
+
+<body>
+</body>
+	<h1>Fill Out Metrcis Form</h1>
+	<h4>Employee Metric (0-10)</h4>
+	<a href="/updaterate.html">Update-Rating</a>
+	<a href="/login.html">Home-page</a>
+	<a href="/managerHome.html">Previous</a>
+	<img src="source/image/eval.jpeg" width="500" height="500">
+
+	<form id="form1" style="border: 1px solid red">
+	  <label >Email</label>
+      <input type="text" id="email"  /><br /><br />
+
+      <label >EmpNo</label>
+      <input type="text" id="en"  /><br /><br />
+
+      <label >PunctualityAndDiscipline</label>
+      <input type="text" id="pa"  /><br /><br />
+
+      <label >ExecutionOfDuties</label>
+      <input type="text" id="ed"  /><br /><br />
+
+      <label >LearningAndDevelopment</label>
+      <input type="text" id="ld"  /><br /><br />
+
+      <label >TeamCooperation</label>
+      <input type="text" id="tc"  /><br /><br />
+
+      <label >ResponsibilityTaken</label>
+      <input type="text" id="rt"  /><br /><br />
+      <input type="button" value="Submit Rating" id='upload-button' onclick="trigger()" />
+      
+    </form>
+
+</html>
+<script type="text/javascript">
+
+
+	function trigger(){
+		
+		var email = document.getElementById("email").value;
+		var employeeNo = document.getElementById("en").value;
+		var punctuality = document.getElementById("pa").value;
+		var execution = document.getElementById("ed").value;
+		var learning = document.getElementById("ld").value;
+		var team = document.getElementById("tc").value;
+		var responsibility = document.getElementById("rt").value;
+		var api = "https://1rcoqfhzjl.execute-api.us-east-1.amazonaws.com/Dev/rate"
+
+		var params = {
+			"email":email,
+			"employeeNo":employeeNo,
+			"punctuality":punctuality,
+			"execution":execution,
+			"learning":learning,
+			"team":team,
+			"responsibility":responsibility
+			
+		};
+
+		var xhttp = new XMLHttpRequest();
+
+		xhttp.onreadystatechange = function(){
+			if(this.readyState == 4 && this.status ==200 )
+			{
+				alert(xhttp.responseText);
+			}
+		};
+		xhttp.open("POST", api, false);
+			var a = xhttp.send(JSON.stringify(params));
+
+			document.getElementById("email").value = '';
+			document.getElementById("en").value = '';
+			document.getElementById("pa").value = '';
+			document.getElementById("ed").value = '';
+			document.getElementById("ld").value = '';
+			document.getElementById("tc").value = '';
+			document.getElementById("rt").value = '';
+	}
+
+</script>
