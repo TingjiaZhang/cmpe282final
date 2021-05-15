@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <link rel=icon href=/favicon.ico> 
+    <title>vue中echarts雷达图组件</title>
+	
+    <script src="js/vue.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+	
+</head>
+
+<body>
+    <div id=app>
+        <div id="myChart" :style="{width: '70%', height: '300px'}"></div>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:'#app',
+            data() {
+                return {
+                    id: '',
+                    myChart: null,
+                    fenSize: [],
+                    themeColor: [],
+                    maxNumber: 100, // 标尺最大值
+                    tooltipFormat: '{a} <br/>{b} : {c} ({d}%)', // 悬停显示内容格式
+                    // 虚构数据
+                    chartData: [
+                        {
+                            value: [89, 98, 79, 85, 86],
+                            name: '小爱同学'
+                        },
+                        {
+                            value: [95, 84, 81, 67, 99],
+                            name: '李阳同学'
+                        },
+                        {
+                            value: [73, 66, 95, 82, 66],
+                            name: '老王同学'
+                        },
+                        {
+                            value: [65, 84, 67, 81, 80],
+                            name: '张亮同学'
+                        }
+                    ]
+                }
+            },
+            computed:{
+                
+            },
+            methods:{
+                // 动态计算标尺数值
+                getFenSize (maxValue) {
+                    let a = Math.ceil(maxValue/5);
+                    for(let i = 1; i < 6; i++) {
+                        this.fenSize[i-1] = a*i;
+                    }
+                },
+                drawLine(){
+                    // 基于准备好的dom，初始化echarts实例
+                    let myChart = echarts.init(document.getElementById('myChart'))
+                    // 绘制图表
+                    myChart.setOption({
+                        // 工具箱
+                        toolbox: {
+                            show: false, // 是否显示
+                            feature: {
+                                dataView: { readOnly: true }, // 数据视图
+                                saveAsImage: {} // 保存图片
+                            }
+                        },
+                        title: {
+                            text: '',
+                            // subtext: '雷达图', // 子标题
+                            x: 'center'
+                        },
+                        tooltip: {
+                            // 鼠标经过时，提示信息
+                            trigger: 'item',
+                            // formatter: this.tooltipFormat
+                        },
+                        // 图例
+                        legend: {
+                            orient: 'vertical',
+                            right: 'right', // 位置，默认右边
+                        },
+                        // 雷达图
+                        radar: {
+                            // 中心位置
+                            center:['49%', '55%'],
+                            startAngle:90,
+                            radius: '90%', // 半径大小
+                            splitNumber: 5,
+                            // shape: 'circle',
+                            // 边角内容展示样式
+                            name: {
+                                textStyle: {
+                                color: '#000000',
+                                backgroundColor: '#fff',
+                                borderRadius: 3,
+                                padding: [3, 5]
+                                }
+                            },
+                            axisLabel: {
+                                show: false,
+                                textStyle: {
+                                    fontSize: 12,
+                                    color: '#333'
+                                }
+                            },
+                            // 雷达图遍数,逆时针安排内容展示
+                            indicator: [
+                                { name: '语文', max: this.maxNumber},
+                                { name: '数学', max: this.maxNumber},
+                                { name: '英语', max: this.maxNumber},
+                                { name: '生物', max: this.maxNumber},
+                                // { name: '物理', max: this.maxNumber},
+                                { name: '化学', max: this.maxNumber}
+                            ]
+                        },
+                        // 极坐标
+                        polar: {
+                            radius: '90%', // 半径大小，应同雷达图的大小
+                        },
+                        angleAxis: {
+                            axisLine: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0)'
+                                }
+                            },
+                        },
+                        radiusAxis: {
+                            type: 'category',
+                            axisLabel: {
+                                show: true,
+                                interval: 0,
+                                fontSize: 12,
+                                color: "rgba(0, 0, 0, 1)",
+                            },
+                            axisTick: {
+                                show: true,
+                                inside: true,
+                            },
+                            axisLine: {
+                                show: false,
+                                lineStyle: {
+                                color: 'rgba(238,238,238, 0.2)'
+                                }
+                            },
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                color: 'rgba(238,238,238, 0.2)'
+                                }
+                            },
+                            // 标尺数值
+                            data: this.fenSize
+                        },
+
+                        series: [
+                        {
+                            name: '',
+                            type: 'radar',
+                            radarIndex:0,
+                            symbol:'star',//拐点样式
+                            data: this.chartData, // 雷达图数据
+                            symbol: 'circle',
+                            symbolSize:6,
+                        }
+                        ],
+                        // 图例设置颜色，循环使用
+                        color: ["#4a7fb0","#c46624","#888888","#a7073f","#375da1","#5b8e39","#5b9bd5","#ed7d31","#a5a5a5","#4472c4"],
+                    })
+                }
+            },
+            beforeMount(){
+                
+            },
+            mounted(){
+                this.getFenSize(this.maxNumber)
+                this.drawLine()
+            },
+            watch:{
+                'message'(){
+                    
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+	
+
+<body>
+</body>
+	<h1>Fill Out Basic Information</h1>
+	
+
+	
+	<form id="form1" style="border: 1px solid red">
+	  <label >EmailAddress</label>
+      <input type="text" id="EmailID"  /><br /><br />
+
+      <label >FirsrName</label>
+      <input type="text" id="FirstName"  /><br /><br />
+
+      <label >LastName</label>
+      <input type="text" id="LastName"  /><br /><br />
+
+     
+      <input type="button" value="Submit" id='upload-button' onclick="trigger()" />
+      
+    </form>
+
+</html>
+<script type="text/javascript">
+
+
+	function trigger(){
+		
+		var EmailID = document.getElementById("EmailID").value;
+		var FirstName = document.getElementById("FirstName").value;
+		var LastName = document.getElementById("LastName").value;
+		
+		var api = "https://9wcsm5yztd.execute-api.us-east-1.amazonaws.com/Dev/info"
+		var params = {
+			"EmailID":EmailID,
+			"FirstName":FirstName,
+			"LastName":LastName
+			
+		};
+
+		var xhttp = new XMLHttpRequest();
+
+		xhttp.onreadystatechange = function(){
+			if(this.readyState == 4 && this.status ==200 )
+			{
+				alert(xhttp.responseText);
+			}
+		};
+		xhttp.open("POST", api, false);
+			var a = xhttp.send(JSON.stringify(params));
+
+			document.getElementById("EmailID").value = '';
+			document.getElementById("FirstName").value = '';
+			document.getElementById("LastName").value = '';
+			
+	}
+
+</script>
+
+
+<!-- 
+
+import json
+import boto3
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('CustomersDetails')
+
+def lambda_handler(event, context):
+    print (event)
+    EmailID = event['EmailID']
+    FirstName = event['FirstName']
+    LastName = event['LastName']
+    
+    
+    table.put_item(
+        Item = {
+            'EmailID':EmailID,
+            'FirstName':FirstName,
+            'LastName':LastName,
+        }
+        )
+    return 'add info successfully!qaq'
+
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
